@@ -77,16 +77,16 @@
         .acc-rn-panel.open { display: block; }
 
         .acc-rn-header {
-            background: ${GREEN};
+            background: #222;
             color: #fff;
-            padding: 0.75rem 1rem;
+            padding: 0.85rem 1rem;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 1.05rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .acc-rn-header span { font-size: 0.75rem; opacity: 0.85; font-weight: 400; }
+        .acc-rn-header span { font-size: 0.8rem; opacity: 0.9; font-weight: 400; }
 
         .acc-rn-body { padding: 0.5rem; }
 
@@ -290,8 +290,7 @@
     panel.setAttribute('aria-label', 'Opciones de accesibilidad');
     panel.innerHTML = `
         <div class="acc-rn-header">
-            Accesibilidad
-            <span>Gobierno de Río Negro</span>
+            Accesibilidad RN
         </div>
         <div class="acc-rn-body">
             <div class="acc-rn-row" data-action="font">
