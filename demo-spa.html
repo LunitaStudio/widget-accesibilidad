@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo SPA (tipo GDE) · Widget de Accesibilidad RN</title>
+    <style>
+        /* Imita la estructura de una app Next.js + Tailwind (como gde.rionegro.gov.ar):
+           body > #__next > secciones con fondos de color. SIN <main>, sin clases del BO.
+           Sirve para verificar que los perfiles de color alcanzan TODO el contenido. */
+        * { box-sizing: border-box; margin: 0; }
+        body { font-family: system-ui, Arial, sans-serif; background: #f3f4f6; }
+        .bar-black { background: #1a1a1a; color: #fff; padding: 0.5rem 1.5rem; font-size: 0.85rem; }
+        .bar-green { background: #7ab648; color: #fff; padding: 0.9rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .bar-green strong { font-size: 1.2rem; }
+        .panel-blue { background: #1f4e79; color: #fff; padding: 3rem 1.5rem; text-align: center; }
+        .panel-blue h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .content { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem; }
+        .login-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .login-card h2 { color: #1f4e79; margin-bottom: 1rem; }
+        label { display: block; margin: 0.9rem 0 0.3rem; font-weight: 600; color: #374151; }
+        input { width: 100%; padding: 0.6rem; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; }
+        .btn-primary { margin-top: 1.4rem; width: 100%; padding: 0.7rem; background: #7ab648; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .logos { display: flex; gap: 1rem; align-items: center; margin-top: 2rem; justify-content: center; }
+        .logos img { height: 48px; }
+        footer { background: #1a1a1a; color: #9ca3af; text-align: center; padding: 1.5rem; margin-top: 2rem; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <!-- Raíz típica de React/Next.js -->
+    <div id="__next">
+        <div class="bar-black">Gobierno de la Provincia de Río Negro</div>
+        <div class="bar-green">
+            <strong>GDE · Gestión Documental Electrónica</strong>
+            <span>Acceso al sistema</span>
+        </div>
+        <div class="panel-blue">
+            <h1>Bienvenido al sistema</h1>
+            <p>Ingresá con tu usuario y contraseña institucional</p>
+        </div>
+        <div class="content">
+            <div class="login-card">
+                <h2>Iniciar sesión</h2>
+                <label for="user">Usuario</label>
+                <input id="user" type="text" placeholder="nombre.apellido">
+                <label for="pass">Contraseña</label>
+                <input id="pass" type="password" placeholder="••••••••">
+                <button class="btn-primary">Ingresar</button>
+            </div>
+            <div class="logos">
+                <img src="https://picsum.photos/120/48?random=1" alt="Logo institucional 1">
+                <img src="https://picsum.photos/120/48?random=2" alt="Logo institucional 2">
+            </div>
+        </div>
+        <footer>© Gobierno de Río Negro · Ministerio de Modernización</footer>
+    </div>
+
+    <script src="accesibilidad-rn.js"></script>
+</body>
+</html>
