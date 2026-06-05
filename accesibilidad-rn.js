@@ -467,10 +467,37 @@
         }
     });
 
+    // Prioridad de acento: argentino/rioplatense primero, luego latinoamericano,
+    // y español de España como último recurso. Devuelve un puntaje (mayor = mejor).
+    function scoreSpanishVoice(v) {
+        if (!v || !v.lang) return -1;
+        const lang = v.lang.toLowerCase().replace('_', '-');
+        if (!lang.startsWith('es')) return -1;
+        const name = (v.name || '').toLowerCase();
+        let score = 0;
+        // Acento por código de región
+        if (lang === 'es-ar') score += 100;                      // Argentina (ideal)
+        else if (lang === 'es-uy' || lang === 'es-py') score += 90; // Rioplatense vecino
+        else if (lang === 'es-419' || lang === 'es-la') score += 70; // Latinoamérica genérico
+        else if (['es-mx','es-cl','es-co','es-pe','es-us'].includes(lang)) score += 60; // Otros LatAm
+        else if (lang === 'es-es') score += 10;                  // España (último recurso)
+        else score += 30;                                        // Otro "es-*" sin clasificar
+        // Pistas por nombre (voces argentinas conocidas en TTS en la nube/SO)
+        if (/elena|tomas|tomás|argent|rioplat/.test(name)) score += 25;
+        // Preferir voces locales del dispositivo si las hubiera
+        if (v.localService) score += 5;
+        return score;
+    }
+
     function pickSpanishVoice() {
         try {
             const voices = speechSynthesis.getVoices() || [];
-            return voices.find(v => v.lang && v.lang.toLowerCase().startsWith('es')) || null;
+            let best = null, bestScore = 0;
+            for (const v of voices) {
+                const s = scoreSpanishVoice(v);
+                if (s > bestScore) { bestScore = s; best = v; }
+            }
+            return best;
         } catch { return null; }
     }
 
@@ -532,9 +559,14 @@
             }
         });
     });
-    // Cargar voces (algunos navegadores las entregan asíncronamente)
+    // Cargar voces (algunos navegadores las entregan asíncronamente):
+    // forzamos una lectura temprana y nos re-suscribimos cuando lleguen,
+    // así pickSpanishVoice() ya tiene la lista lista en el primer "play".
     if ('speechSynthesis' in window) {
-        speechSynthesis.onvoiceschanged = () => {};
+        try { speechSynthesis.getVoices(); } catch {}
+        speechSynthesis.onvoiceschanged = () => {
+            try { speechSynthesis.getVoices(); } catch {}
+        };
     }
 
     // ===== RESET =====
