@@ -34,6 +34,8 @@ Se configura con atributos `data-*` en la misma etiqueta `<script>`:
 ## Funciones
 
 - **Tamaño de letra** (A+ / A-)
+- **Espaciado de texto** (interlineado, entre letras y palabras — WCAG 2.1 SC 1.4.12)
+- **Fuente legible** (alta legibilidad / dislexia)
 - **Perfiles de color**: Normal, Oscuro (baja visión), Sepia (lectura prolongada), Daltonismo, Escala de grises
 - **Subrayar links**
 - **Cursor grande**

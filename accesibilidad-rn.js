@@ -266,6 +266,21 @@
             scroll-behavior: auto !important;
         }
 
+        /* Espaciado de texto (WCAG 2.1 SC 1.4.12 Text Spacing) */
+        body.acc-spacing > :not(.acc-rn-ui),
+        body.acc-spacing > :not(.acc-rn-ui) * {
+            line-height: 1.6 !important;
+            letter-spacing: 0.12em !important;
+            word-spacing: 0.16em !important;
+        }
+        body.acc-spacing > :not(.acc-rn-ui) :is(p, li) { margin-bottom: 2em !important; }
+
+        /* Fuente legible (alta legibilidad / dislexia) */
+        body.acc-legible > :not(.acc-rn-ui),
+        body.acc-legible > :not(.acc-rn-ui) * {
+            font-family: Verdana, Tahoma, 'Trebuchet MS', 'Segoe UI', Arial, sans-serif !important;
+        }
+
         /* Respetar preferencia de movimiento reducido en el propio widget */
         @media (prefers-reduced-motion: reduce) {
             .acc-rn-btn, .acc-rn-row, .acc-rn-mini-btn, .acc-rn-reset { transition: none; }
@@ -301,6 +316,14 @@
                     <button type="button" class="acc-rn-mini-btn" data-font="1" aria-label="Aumentar tamaño de letra">A+</button>
                 </span>
             </div>
+            <button type="button" class="acc-rn-row" data-toggle="acc-spacing" aria-pressed="false">
+                <span class="acc-rn-icon" aria-hidden="true">⇕</span>
+                <span class="acc-rn-label">Espaciado de texto</span>
+            </button>
+            <button type="button" class="acc-rn-row" data-toggle="acc-legible" aria-pressed="false">
+                <span class="acc-rn-icon" aria-hidden="true">Ⓕ</span>
+                <span class="acc-rn-label">Fuente legible</span>
+            </button>
             <button type="button" class="acc-rn-row" data-action="color-profile" aria-pressed="false">
                 <span class="acc-rn-icon" aria-hidden="true">◑</span>
                 <span class="acc-rn-label acc-rn-profile-label">Perfil de color: Normal</span>
@@ -516,7 +539,7 @@
 
     // ===== RESET =====
     panel.querySelector('.acc-rn-reset').addEventListener('click', () => {
-        ['acc-dark', 'acc-sepia', 'acc-daltonismo', 'acc-grayscale', 'acc-links', 'acc-cursor', 'acc-no-animations']
+        ['acc-dark', 'acc-sepia', 'acc-daltonismo', 'acc-grayscale', 'acc-links', 'acc-cursor', 'acc-no-animations', 'acc-spacing', 'acc-legible']
             .forEach(cls => document.body.classList.remove(cls));
         colorIndex = 0;
         applyColorProfile();
@@ -537,14 +560,26 @@
         // Restaurar preferencias
         applyColorProfile();
         applyFontSize();
-        ['acc-links', 'acc-cursor', 'acc-no-animations'].forEach(cls => {
+        ['acc-links', 'acc-cursor', 'acc-no-animations', 'acc-spacing', 'acc-legible'].forEach(cls => {
             if (prefs[cls]) {
                 document.body.classList.add(cls);
                 const row = panel.querySelector(`[data-toggle="${cls}"]`);
                 if (row) row.setAttribute('aria-pressed', 'true');
             }
         });
+
+        // Si el sistema pide movimiento reducido y el usuario nunca tocó la opción,
+        // activar "detener animaciones" por defecto (sigue al sistema hasta que la cambie).
+        if (prefs['acc-no-animations'] === undefined &&
+            window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.body.classList.add('acc-no-animations');
+            const row = panel.querySelector('[data-toggle="acc-no-animations"]');
+            if (row) row.setAttribute('aria-pressed', 'true');
+        }
     }
+
+    // Cortar la lectura en voz alta al navegar (evita que la voz siga en otra página)
+    window.addEventListener('beforeunload', () => { try { speechSynthesis.cancel(); } catch {} });
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
